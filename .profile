@@ -26,6 +26,7 @@ export PAGER='bat'
 export BROWSER='qutebrowser'
 export FILE='lf'
 export SUDO_ASKPASS="$XDG_SCRIPT_HOME/uitools/raskpass"
+export PGDATA="$HOME/data/db/postgres/data13"
 export KERNEL_RELEASE="$(uname -or)"
 
 # Clean up home
@@ -40,7 +41,6 @@ export GOPATH="$XDG_SRC_HOME/go"
 export PYLINTRC="$XDG_CONFIG_HOME/pylint/pylintrc"
 export GRIPHOME="$XDG_CONFIG_HOME/grip"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-export PGDATA="$HOME/data/db/postgres/data12"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 
 # Set less/man colors
