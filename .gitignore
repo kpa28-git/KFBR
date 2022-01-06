@@ -1,0 +1,19 @@
+# Ignore All:
+*
+
+# Whitelist:
+!/.config/
+!/.local/
+!.bash_profile
+!.gitignore
+!.gitmodules
+!.login
+!.login_conf
+!.profile
+!.tmux.conf
+!.Xresources
+!.xinitrc
+!.xprofile
+!.xsession
+!.zprofile
+!README.md

@@ -1,0 +1,145 @@
+set shell sh
+#  _|	  _|_|
+#  _|	_|
+#  _|  _|_|_|_|
+#  _|	_|
+#  _|	_|
+# lf file manager config
+
+# pistol file previews
+set previewer pistol
+
+# Unmappings
+map d
+map <enter>
+map o
+map u
+map w
+map s
+map r
+map t
+map c
+map x
+map -
+map ge
+
+# Mappings
+map <enter> $$SHELL
+map o open $f
+map u clear
+map w unselect
+map ge bottom
+map da drag-all
+map ds drag-sep
+map dl drag-dl
+map tdd :trash-put
+map tls :trash-list
+map tre :trash-restore
+map trm :trash-rm
+map tem :trash-empty
+map sd :search-dir
+map r $printf "%s\n" "$fx" | vidir -
+map x push $ext<space>
+map - :img-preview
+
+# # Switches
+# set hidden on
+# set color256 on
+
+# Dragon File Uploader - opens an upload drag box for selected files
+cmd drag-all %dragon-drag-and-drop -a -x $fx
+cmd drag-sep %dragon-drag-and-drop $fx
+cmd drag-dl %drag-dl
+
+# Open File
+cmd open &{{
+	case $(file --mime-type "$f" -b) in
+		text/*) setsid $OPENER "$f" ;;
+		video/*) setsid mpv "$f" > /dev/null 2 2>&1 & ;;
+		*) for file in $f; do setsid $OPENER "$file" > /dev/null 2> /dev/null & done ;;
+	esac
+}}
+
+# Create Directory
+cmd mkdir ${{
+	printf "Directory Name: "
+	read ans
+	mkdir $ans
+}}
+
+# Create File
+cmd mkfile ${{
+	printf "File Name: "
+	read ans
+	$EDITOR $ans
+}}
+
+cmd symlink ${{
+	printf "Symlink Name: "
+	read ans
+
+	for file in "$fx"
+	do
+		ln -s $file $ans
+	done
+}}
+
+# Change Permissions
+cmd chmod ${{
+	printf "Mode Bits: "
+	read ans
+
+	for file in "$fx"
+	do
+		chmod $ans $file
+	done
+}}
+
+cmd bulkrename ${{ vidir; }}
+
+# Put File(s) in Trash (trash-cli)
+cmd trash-put %trash-put $fx
+
+# Show Trashed Files (trash-cli)
+cmd trash-list ${{
+	trash-list | $PAGER
+}}
+
+# Restore Trashed Files (trash-cli)
+cmd trash-restore ${{
+	trash-restore
+}}
+
+# Delete Chosen Trashed File Permanently (trash-cli)
+cmd trash-rm ${{
+	TO_REMOVE=$(trash-list | fzf --reverse --info=inline --header='Delete File' | awk '{print $NF}')
+	trash-rm "$TO_REMOVE"
+}}
+
+# Delete all Trashed Files Permanently (trash-cli)
+cmd trash-empty %trash-empty
+
+# Fuzzy Navigation
+cmd search-dir ${{
+	res="$(fd -HI --ignore-file \"\$HOME\"/.config/fd/ignore_file | fzf --reverse --info=inline --preview='pistol {}' --header='Search Directory')"
+	if [ -f "$res" ]; then
+		cmd="select"
+	elif [ -d "$res" ]; then
+		cmd="cd"
+	fi
+	lf -remote "send $id $cmd \"$res\""
+}}
+
+# Preview Image/Video
+cmd img-preview ${{
+	mime_type=$(file -bi "$f")
+	draw="$HOME"/.config/lf/draw_img.sh
+
+	case $(file --mime-type "$f" -b) in
+		image/*) $draw "$f" ;;
+		video/*) CACHE=$(mktemp /tmp/thumb_cache.XXXXX)
+			ffmpegthumbnailer -i "$f" -o $CACHE -s 0 -f
+			$draw $CACHE && rm $CACHE ;;
+		*) lf -remote "send $id echoerr 'Not an image/video file'" ;;
+	esac
+}}

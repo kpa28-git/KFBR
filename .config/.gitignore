@@ -1,0 +1,27 @@
+# Ignore All:
+*
+
+# Traverse Directories
+!*/
+
+# Whitelist:
+!/alacritty/**
+!/bash/**
+!/bspwm/**
+!/dunst/**
+!/git/**
+!/htop/**
+!/julia/**
+!/kak/**
+!/lf/**
+!/pistol/**
+!/qutebrowser/**
+!/rofi/**
+!/postgres/**
+!/sxhkd/**
+!/tmux/**
+!/zsh/**
+!aliasrc
+!mimeapps.list
+!README.md
+!.gitignore
