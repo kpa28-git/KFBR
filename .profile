@@ -40,6 +40,7 @@ export GOPATH="$XDG_SRC_HOME/go"
 export PYLINTRC="$XDG_CONFIG_HOME/pylint/pylintrc"
 export GRIPHOME="$XDG_CONFIG_HOME/grip"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export PGDATA="$HOME/data/db/postgres/data12"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 
 # Set less/man colors
